@@ -1,0 +1,1 @@
+const cfg=window.CO2_STAND_CONFIG||{};function openTarget(url,label){if(!url){alert(label+" ainda não foi configurado.");return;}window.location.href=url;}document.getElementById("newInterview").addEventListener("click",()=>openTarget(cfg.formUrl,"O formulário"));document.getElementById("manageResponses").addEventListener("click",()=>openTarget(cfg.sheetUrl,"A planilha"));
