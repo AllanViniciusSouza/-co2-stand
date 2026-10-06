@@ -1,4 +1,7 @@
-window.CO2_STAND_CONFIG={
-formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSfuFohqosGGznFay9a0uaiHqSjnsMsaugek7HvO_qx8CaDmSg/viewform?usp=publish-editor",
-sheetUrl:"https://docs.google.com/spreadsheets/d/1aXxN1QCp5AxQ86_C9yOBwuGDyoV8P1E7FDIYeRlUCgo/edit"
+window.CO2_STAND_CONFIG = {
+  recordsApiUrl: "",
+  demoRecords: [
+    { id:"ST-001", empresa:"Empresa teste", stand:"1", total:3.321, maiorFonte:"Transporte" },
+    { id:"ST-002", empresa:"Empresa teste 2", stand:"2", total:0.632, maiorFonte:"Transporte" }
+  ]
 };

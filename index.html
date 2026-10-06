@@ -1,31 +1,101 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0f5132">
-<title>Calculadora de Pegada de Carbono em Eventos</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0f5132">
+  <title>CO₂ Stand</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<main class="app-shell">
-<header class="hero">
-<div class="badge">Protótipo acadêmico</div>
-<h1>Calculadora de Pegada de Carbono em Eventos</h1>
-<p>Levantamento rápido de dados por stand para estimativa de emissões em kgCO₂e.</p>
-<div class="meta"><span>Engenharia de Controle e Automação</span><span>Entrevista alvo: 2–3 min</span></div>
-</header>
-<section class="card action-card"><div><h2>Novo levantamento</h2><p>Abra o formulário de campo para registrar um novo stand.</p></div><button id="newInterview" class="btn primary">+ Iniciar entrevista</button></section>
-<section class="card action-card"><div><h2>Gerenciar respostas</h2><p>Abra a planilha de respostas para corrigir ou descartar um registro incorreto.</p></div><button id="manageResponses" class="btn secondary">Gerenciar registros</button></section>
-<section class="card"><h2>Como funciona</h2><div class="flow">
-<div><strong>1</strong><span>Coleta</span><small>Transporte, energia, materiais e resíduos.</small></div>
-<div><strong>2</strong><span>Cálculo</span><small>Dado de atividade × fator de emissão.</small></div>
-<div><strong>3</strong><span>Diagnóstico</span><small>Total por stand e principal fonte de impacto.</small></div>
-<div><strong>4</strong><span>Recomendação</span><small>Indicação de oportunidades de redução.</small></div>
-</div></section>
-<section class="card note"><h2>Transparência metodológica</h2><p>Os resultados são estimativas. O projeto registra dados medidos, informados, estimados e assumidos, além da fonte e do ano de cada fator de emissão.</p></section>
-<footer>CO₂ Stand • Protótipo para TCC</footer>
-</main>
-<script src="config.js"></script>
-<script src="app.js"></script>
-</body></html>
+  <header class="topbar">
+    <button id="homeBtn" class="brand" type="button" aria-label="Voltar ao início">
+      <span class="brand-mark">CO₂</span><span>Stand</span>
+    </button>
+    <nav>
+      <button class="nav-btn active" data-view="home" type="button">Início</button>
+      <button class="nav-btn" data-view="form" type="button">Novo stand</button>
+      <button class="nav-btn" data-view="records" type="button">Registros</button>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <section id="view-home" class="view active">
+      <div class="hero">
+        <div class="eyebrow">Protótipo acadêmico</div>
+        <h1>Calculadora de Pegada de Carbono em Eventos</h1>
+        <p>Coleta rápida, cálculo em kgCO₂e, diagnóstico por stand e visão consolidada do evento.</p>
+      </div>
+
+      <div class="home-actions">
+        <button class="action-card primary-card" data-go="form" type="button">
+          <span class="icon">＋</span>
+          <span><strong>Iniciar entrevista</strong><small>Registrar um novo stand</small></span>
+        </button>
+        <button class="action-card" data-go="records" type="button">
+          <span class="icon">▦</span>
+          <span><strong>Visualizar registros</strong><small>Ver resultados em cards</small></span>
+        </button>
+      </div>
+
+      <div class="flow-card">
+        <h2>Fluxo do projeto</h2>
+        <div class="flow">
+          <div><b>1</b><strong>Coleta</strong><small>Transporte, energia, materiais, resíduos e alimentação.</small></div>
+          <div><b>2</b><strong>Cálculo</strong><small>Dado de atividade × fator de emissão.</small></div>
+          <div><b>3</b><strong>Diagnóstico</strong><small>Total e maior fonte de emissão por stand.</small></div>
+          <div><b>4</b><strong>Recomendação</strong><small>Prioridades para redução do impacto.</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-form" class="view">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow dark">Coleta de campo</span>
+          <h2>Novo stand</h2>
+        </div>
+        <button class="back-btn" data-go="home" type="button">← Voltar ao início</button>
+      </div>
+      <div class="iframe-card">
+        <iframe id="formFrame"
+          title="Formulário CO₂ Stand"
+          src="https://docs.google.com/forms/d/e/1FAIpQLSfuFohqosGGznFay9a0uaiHqSjnsMsaugek7HvO_qx8CaDmSg/viewform?embedded=true"
+          loading="lazy">Carregando…</iframe>
+      </div>
+      <div class="bottom-actions">
+        <button class="back-btn full" data-go="home" type="button">← Voltar ao início</button>
+      </div>
+    </section>
+
+    <section id="view-records" class="view">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow dark">Resultados</span>
+          <h2>Registros dos stands</h2>
+        </div>
+        <button class="back-btn" data-go="home" type="button">← Voltar ao início</button>
+      </div>
+
+      <div id="recordSummary" class="summary-grid"></div>
+      <div class="record-toolbar">
+        <span id="recordStatus">Carregando registros…</span>
+        <button id="refreshBtn" type="button" class="small-btn">Atualizar</button>
+      </div>
+      <div id="recordList" class="records-grid" aria-live="polite"></div>
+
+      <div id="apiHelp" class="help-card hidden">
+        <strong>Integração pendente</strong>
+        <p>O visual de cards está pronto. Para atualizar automaticamente com novos envios, publique o Apps Script incluído no pacote e cole a URL em <code>config.js</code>.</p>
+      </div>
+
+      <div class="bottom-actions">
+        <button class="back-btn full" data-go="home" type="button">← Voltar ao início</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
