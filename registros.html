@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f5132">
+  <title>Resultados • CO₂ Stand</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header inner">
+  <a class="back-link" href="index.html">← Início</a>
+  <div class="page-title">Resultados</div>
+  <span class="header-spacer"></span>
+</header>
+
+<main class="page records-page">
+  <section class="records-hero">
+    <span class="eyebrow green">Visão consolidada</span>
+    <h1>Registros dos stands</h1>
+    <p>Acompanhe os resultados calculados sem precisar abrir a planilha.</p>
+  </section>
+
+  <section id="summaryCards" class="summary-cards"></section>
+
+  <div class="toolbar">
+    <span id="status">Carregando registros…</span>
+    <button id="refreshBtn" type="button">Atualizar</button>
+  </div>
+
+  <section id="recordList" class="record-list" aria-live="polite"></section>
+
+  <section id="integrationNotice" class="integration-notice hidden">
+    <strong>Integração ainda não publicada</strong>
+    <p>Os cards abaixo usam os registros de demonstração até a URL do Apps Script ser configurada.</p>
+  </section>
+</main>
+
+<script src="config.js"></script>
+<script src="records.js"></script>
+</body>
+</html>

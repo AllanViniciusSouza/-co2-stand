@@ -2,100 +2,67 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0f5132">
   <title>CO₂ Stand</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <button id="homeBtn" class="brand" type="button" aria-label="Voltar ao início">
-      <span class="brand-mark">CO₂</span><span>Stand</span>
-    </button>
-    <nav>
-      <button class="nav-btn active" data-view="home" type="button">Início</button>
-      <button class="nav-btn" data-view="form" type="button">Novo stand</button>
-      <button class="nav-btn" data-view="records" type="button">Registros</button>
-    </nav>
-  </header>
+<header class="site-header">
+  <a class="brand" href="index.html">
+    <span class="brand-badge">CO₂</span>
+    <span>Stand</span>
+  </a>
+</header>
 
-  <main class="shell">
-    <section id="view-home" class="view active">
-      <div class="hero">
-        <div class="eyebrow">Protótipo acadêmico</div>
-        <h1>Calculadora de Pegada de Carbono em Eventos</h1>
-        <p>Coleta rápida, cálculo em kgCO₂e, diagnóstico por stand e visão consolidada do evento.</p>
-      </div>
+<main class="page">
+  <section class="hero">
+    <div class="eyebrow">Protótipo acadêmico</div>
+    <h1>Calculadora de Pegada de Carbono em Eventos</h1>
+    <p>Levantamento rápido por stand com cálculo estimado em kgCO₂e.</p>
+    <div class="hero-meta">
+      <span>Engenharia de Controle e Automação</span>
+      <span>Coleta em 2–3 min</span>
+    </div>
+  </section>
 
-      <div class="home-actions">
-        <button class="action-card primary-card" data-go="form" type="button">
-          <span class="icon">＋</span>
-          <span><strong>Iniciar entrevista</strong><small>Registrar um novo stand</small></span>
-        </button>
-        <button class="action-card" data-go="records" type="button">
-          <span class="icon">▦</span>
-          <span><strong>Visualizar registros</strong><small>Ver resultados em cards</small></span>
-        </button>
+  <section class="quick-actions">
+    <a class="quick-card primary" href="formulario.html">
+      <span class="quick-icon">＋</span>
+      <div>
+        <strong>Nova entrevista</strong>
+        <small>Preencher dados de um stand</small>
       </div>
+      <span class="arrow">›</span>
+    </a>
 
-      <div class="flow-card">
-        <h2>Fluxo do projeto</h2>
-        <div class="flow">
-          <div><b>1</b><strong>Coleta</strong><small>Transporte, energia, materiais, resíduos e alimentação.</small></div>
-          <div><b>2</b><strong>Cálculo</strong><small>Dado de atividade × fator de emissão.</small></div>
-          <div><b>3</b><strong>Diagnóstico</strong><small>Total e maior fonte de emissão por stand.</small></div>
-          <div><b>4</b><strong>Recomendação</strong><small>Prioridades para redução do impacto.</small></div>
-        </div>
+    <a class="quick-card" href="registros.html">
+      <span class="quick-icon">▦</span>
+      <div>
+        <strong>Resultados</strong>
+        <small>Visualizar stands em cards</small>
       </div>
-    </section>
+      <span class="arrow">›</span>
+    </a>
+  </section>
 
-    <section id="view-form" class="view">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow dark">Coleta de campo</span>
-          <h2>Novo stand</h2>
-        </div>
-        <button class="back-btn" data-go="home" type="button">← Voltar ao início</button>
-      </div>
-      <div class="iframe-card">
-        <iframe id="formFrame"
-          title="Formulário CO₂ Stand"
-          src="https://docs.google.com/forms/d/e/1FAIpQLSfuFohqosGGznFay9a0uaiHqSjnsMsaugek7HvO_qx8CaDmSg/viewform?embedded=true"
-          loading="lazy">Carregando…</iframe>
-      </div>
-      <div class="bottom-actions">
-        <button class="back-btn full" data-go="home" type="button">← Voltar ao início</button>
-      </div>
-    </section>
+  <section class="section-card">
+    <div class="section-title">
+      <span>Como funciona</span>
+      <small>Fluxo metodológico</small>
+    </div>
+    <div class="steps">
+      <div class="step"><span>1</span><strong>Coleta</strong><small>Transporte, energia, materiais, resíduos e alimentação.</small></div>
+      <div class="step"><span>2</span><strong>Cálculo</strong><small>Dado de atividade × fator de emissão.</small></div>
+      <div class="step"><span>3</span><strong>Diagnóstico</strong><small>Total e principal fonte de impacto por stand.</small></div>
+      <div class="step"><span>4</span><strong>Recomendação</strong><small>Oportunidades de redução de emissões.</small></div>
+    </div>
+  </section>
 
-    <section id="view-records" class="view">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow dark">Resultados</span>
-          <h2>Registros dos stands</h2>
-        </div>
-        <button class="back-btn" data-go="home" type="button">← Voltar ao início</button>
-      </div>
-
-      <div id="recordSummary" class="summary-grid"></div>
-      <div class="record-toolbar">
-        <span id="recordStatus">Carregando registros…</span>
-        <button id="refreshBtn" type="button" class="small-btn">Atualizar</button>
-      </div>
-      <div id="recordList" class="records-grid" aria-live="polite"></div>
-
-      <div id="apiHelp" class="help-card hidden">
-        <strong>Integração pendente</strong>
-        <p>O visual de cards está pronto. Para atualizar automaticamente com novos envios, publique o Apps Script incluído no pacote e cole a URL em <code>config.js</code>.</p>
-      </div>
-
-      <div class="bottom-actions">
-        <button class="back-btn full" data-go="home" type="button">← Voltar ao início</button>
-      </div>
-    </section>
-  </main>
-
-  <script src="config.js"></script>
-  <script src="app.js"></script>
+  <section class="method-note">
+    <strong>Transparência metodológica</strong>
+    <p>Os resultados são estimativas. O projeto diferencia dados informados, estimados e assumidos e mantém a fonte de cada fator de emissão.</p>
+  </section>
+</main>
 </body>
 </html>
