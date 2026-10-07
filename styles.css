@@ -47,3 +47,5 @@ fieldset.field{min-width:0}
 .hidden{display:none!important}
 @media(max-width:720px){.quick-actions{grid-template-columns:1fr}.steps-home{grid-template-columns:1fr 1fr}.summary-cards{grid-template-columns:1fr 1fr}.record-list{grid-template-columns:1fr}}
 @media(max-width:430px){.page{padding-left:12px;padding-right:12px}.steps-home{grid-template-columns:1fr}.choice-grid,.check-grid{grid-template-columns:1fr}.summary-cards{grid-template-columns:1fr 1fr}}
+
+.hidden-submit-frame{display:none;width:0;height:0;border:0}

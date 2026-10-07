@@ -1,16 +1,21 @@
-# CO₂ Stand v4.3 — envio robusto por GET
+# CO₂ Stand v4.4 — envio nativo do navegador
 
-Esta versão evita POST/CORS/redirecionamentos do Safari.
+Nesta versão o formulário real da página é enviado diretamente pelo Safari para o Apps Script usando GET e um iframe oculto.
+
+Não usa:
+- fetch()
+- POST
+- CORS
+- montagem manual de uma segunda cópia do formulário
 
 ## Apps Script
-Substitua o código do Apps Script pelo código completo fornecido no chat (igual ao arquivo AppsScript.gs deste pacote), publique uma nova implantação e envie a nova URL /exec para atualizar config.js se ela mudar.
+Não precisa alterar o Apps Script desta vez.
 
 ## GitHub
-Depois de atualizar a URL, envie:
-- index.html
+Substitua os arquivos da raiz pelos deste pacote, especialmente:
 - formulario.html
-- registros.html
-- styles.css
-- config.js
 - form.js
-- records.js
+- config.js
+- styles.css
+
+Os scripts usam ?v=44 para evitar cache antigo no iPhone.

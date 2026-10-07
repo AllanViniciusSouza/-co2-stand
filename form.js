@@ -161,46 +161,26 @@
    * usa um FORM HTML tradicional direcionado a um iframe invisível.
    * Isso evita CORS/redirecionamentos do fetch() no Safari/iPhone.
    */
-  function submitViaHiddenForm(data){
-    return new Promise((resolve, reject) => {
-      if(!cfg.apiUrl){
-        reject(new Error("API não configurada"));
-        return;
-      }
+  function prepareNativeSubmission(){
+    if(!cfg.apiUrl){
+      throw new Error("API não configurada");
+    }
 
-      const params = new URLSearchParams();
-      params.set("action", "submit");
+    form.action = cfg.apiUrl;
+    form.method = "GET";
+    form.target = "submitFrame";
 
-      Object.entries(data).forEach(([key,value]) => {
-        params.set(key, value == null ? "" : String(value));
-      });
-
-      const iframe = document.createElement("iframe");
-      iframe.style.display = "none";
-      iframe.setAttribute("aria-hidden", "true");
-
-      let done = false;
-      iframe.addEventListener("load", () => {
-        if(done) return;
-        done = true;
-        setTimeout(() => iframe.remove(), 300);
-        resolve();
-      });
-
-      iframe.src = cfg.apiUrl + "?" + params.toString();
-      document.body.appendChild(iframe);
-
-      // Fallback para Safari: a requisição já foi disparada quando src foi atribuído.
-      setTimeout(() => {
-        if(done) return;
-        done = true;
-        iframe.remove();
-        resolve();
-      }, 4000);
-    });
+    let actionInput = form.querySelector('input[name="action"]');
+    if(!actionInput){
+      actionInput = document.createElement("input");
+      actionInput.type = "hidden";
+      actionInput.name = "action";
+      form.appendChild(actionInput);
+    }
+    actionInput.value = "submit";
   }
 
-  form.addEventListener("submit", async e=>{
+  form.addEventListener("submit", e=>{
     e.preventDefault();
     if(!validateStep()) return;
 
@@ -209,14 +189,24 @@
     show(errorBox, false);
 
     try{
-      await submitViaHiddenForm(payload());
-      localStorage.removeItem("co2StandDraft");
-      form.classList.add("hidden");
-      document.querySelector(".progress-wrap").classList.add("hidden");
-      successView.classList.remove("hidden");
-      window.scrollTo({top:0,behavior:"smooth"});
+      prepareNativeSubmission();
+
+      // Envia os próprios campos reais do formulário.
+      // Isso evita fetch, CORS, POST e montagem manual de parâmetros.
+      HTMLFormElement.prototype.submit.call(form);
+
+      setTimeout(() => {
+        localStorage.removeItem("co2StandDraft");
+        form.classList.add("hidden");
+        document.querySelector(".progress-wrap").classList.add("hidden");
+        successView.classList.remove("hidden");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Enviar levantamento";
+        window.scrollTo({top:0,behavior:"smooth"});
+      }, 2200);
+
     }catch(err){
-      errorBox.textContent = "Não foi possível enviar. Tente novamente.";
+      errorBox.textContent = "Não foi possível iniciar o envio. Recarregue a página e tente novamente.";
       show(errorBox,true);
       submitBtn.disabled = false;
       submitBtn.textContent = "Enviar levantamento";
