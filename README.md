@@ -49,3 +49,9 @@ Mantenha a mesma URL /exec. O `config.js` já está configurado para ela.
 ## Teclado numérico
 Campos de quantidade usam `inputmode="numeric"`.
 Campos de km, kg e horas usam `inputmode="decimal"`.
+
+
+## v4.1 — correção do envio no Safari/iPhone
+O envio agora usa POST por formulário HTML tradicional para um iframe invisível.
+Isso evita o problema de CORS/redirecionamento do `fetch()` com Apps Script.
+O `doGet()` também ignora linhas calculadas que não possuem Empresa/Projeto.

@@ -34,8 +34,7 @@
 
     const log = q("logistica") === "Sim";
     show(document.getElementById("logisticsDetails"), log);
-    const logRadios = form.querySelectorAll('[name="veiculoLog"]');
-    logRadios.forEach(x => x.required = log);
+    form.querySelectorAll('[name="veiculoLog"]').forEach(x => x.required = log);
     setRequired(byName("distanciaLog"), log);
     setRequired(byName("viagensLog"), log);
 
@@ -65,19 +64,21 @@
     applyConditionals();
     saveDraft();
   });
+
   form.addEventListener("input", saveDraft);
 
   function validateStep(){
     applyConditionals();
     const active = steps[current];
     const fields = [...active.querySelectorAll("input,textarea")].filter(el => !el.closest(".hidden"));
+
     for(const el of fields){
       if(!el.checkValidity()){
         el.reportValidity();
         return false;
       }
     }
-    // Groups of radios required:
+
     const requiredRadios = [...active.querySelectorAll('input[type="radio"][required]')];
     const names = [...new Set(requiredRadios.map(x=>x.name))];
     for(const name of names){
@@ -87,6 +88,7 @@
         return false;
       }
     }
+
     show(errorBox, false);
     return true;
   }
@@ -96,6 +98,7 @@
     prevBtn.classList.toggle("hidden", current===0);
     nextBtn.classList.toggle("hidden", current===steps.length-1);
     submitBtn.classList.toggle("hidden", current!==steps.length-1);
+
     const pct = Math.round(((current+1)/steps.length)*100);
     progressBar.style.width = pct+"%";
     stepLabel.textContent = `Etapa ${current+1} de ${steps.length}`;
@@ -108,6 +111,7 @@
     if(!validateStep()) return;
     if(current < steps.length-1){ current++; renderStep(); }
   });
+
   prevBtn.addEventListener("click", ()=>{
     if(current>0){ current--; renderStep(); }
   });
@@ -115,7 +119,9 @@
   function val(name){ return (byName(name)?.value ?? "").toString().trim(); }
 
   function payload(){
-    const materials = [...form.querySelectorAll('[name="materiais"]:checked')].map(x=>x.value).join(", ");
+    const materials = [...form.querySelectorAll('[name="materiais"]:checked')]
+      .map(x=>x.value).join(", ");
+
     return {
       empresa: val("empresa"),
       stand: val("stand"),
@@ -150,27 +156,92 @@
     };
   }
 
-  async function submitData(data){
-    if(!cfg.apiUrl) throw new Error("API não configurada");
-    // Simple form POST avoids CORS preflight. no-cors is intentional for Apps Script web apps.
-    const body = new URLSearchParams(data);
-    await fetch(cfg.apiUrl, {method:"POST", mode:"no-cors", body});
+  /*
+   * Envio robusto para Apps Script:
+   * usa um FORM HTML tradicional direcionado a um iframe invisível.
+   * Isso evita CORS/redirecionamentos do fetch() no Safari/iPhone.
+   */
+  function submitViaHiddenForm(data){
+    return new Promise((resolve, reject) => {
+      if(!cfg.apiUrl){
+        reject(new Error("API não configurada"));
+        return;
+      }
+
+      const frameName = "co2SubmitFrame_" + Date.now();
+      const iframe = document.createElement("iframe");
+      iframe.name = frameName;
+      iframe.style.display = "none";
+      iframe.setAttribute("aria-hidden", "true");
+
+      const postForm = document.createElement("form");
+      postForm.method = "POST";
+      postForm.action = cfg.apiUrl;
+      postForm.target = frameName;
+      postForm.style.display = "none";
+
+      Object.entries(data).forEach(([key,value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value ?? "";
+        postForm.appendChild(input);
+      });
+
+      let finished = false;
+      const cleanup = () => {
+        setTimeout(() => {
+          iframe.remove();
+          postForm.remove();
+        }, 500);
+      };
+
+      iframe.addEventListener("load", () => {
+        if(finished) return;
+        finished = true;
+        cleanup();
+        resolve();
+      });
+
+      document.body.appendChild(iframe);
+      document.body.appendChild(postForm);
+
+      try{
+        postForm.submit();
+      }catch(err){
+        cleanup();
+        reject(err);
+        return;
+      }
+
+      // Fallback: Apps Script may block readable iframe load after redirect,
+      // but the POST itself is already sent.
+      setTimeout(() => {
+        if(finished) return;
+        finished = true;
+        cleanup();
+        resolve();
+      }, 2500);
+    });
   }
 
   form.addEventListener("submit", async e=>{
     e.preventDefault();
     if(!validateStep()) return;
+
     submitBtn.disabled = true;
     submitBtn.textContent = "Enviando…";
+    show(errorBox, false);
+
     try{
-      await submitData(payload());
+      await submitViaHiddenForm(payload());
       localStorage.removeItem("co2StandDraft");
       form.classList.add("hidden");
       document.querySelector(".progress-wrap").classList.add("hidden");
       successView.classList.remove("hidden");
       window.scrollTo({top:0,behavior:"smooth"});
     }catch(err){
-      errorBox.textContent = "Não foi possível enviar. Verifique sua conexão e tente novamente.";
+      errorBox.textContent = "Não foi possível enviar. Tente novamente.";
       show(errorBox,true);
       submitBtn.disabled = false;
       submitBtn.textContent = "Enviar levantamento";
