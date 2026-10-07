@@ -168,52 +168,35 @@
         return;
       }
 
-      const frameName = "co2SubmitFrame_" + Date.now();
-
-      const iframe = document.createElement("iframe");
-      iframe.name = frameName;
-      iframe.style.display = "none";
-      iframe.setAttribute("aria-hidden", "true");
-      document.body.appendChild(iframe);
-
-      const postForm = document.createElement("form");
-      postForm.method = "POST";
-      postForm.action = cfg.apiUrl;
-      postForm.target = frameName;
-      postForm.enctype = "application/x-www-form-urlencoded";
-      postForm.acceptCharset = "UTF-8";
-      postForm.style.display = "none";
+      const params = new URLSearchParams();
+      params.set("action", "submit");
 
       Object.entries(data).forEach(([key,value]) => {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = key;
-        input.value = value == null ? "" : String(value);
-        postForm.appendChild(input);
+        params.set(key, value == null ? "" : String(value));
       });
 
-      document.body.appendChild(postForm);
+      const iframe = document.createElement("iframe");
+      iframe.style.display = "none";
+      iframe.setAttribute("aria-hidden", "true");
 
-      // Safari pode carregar about:blank no iframe antes do POST.
-      // Não usamos esse evento como confirmação e não removemos o iframe cedo.
-      try{
-        postForm.submit();
-      }catch(err){
-        setTimeout(() => {
-          iframe.remove();
-          postForm.remove();
-        }, 1000);
-        reject(err);
-        return;
-      }
-
-      // O Apps Script responde em outro domínio; não precisamos ler a resposta.
-      // Mantemos o alvo vivo por tempo suficiente para o Safari enviar o corpo.
-      setTimeout(() => {
-        iframe.remove();
-        postForm.remove();
+      let done = false;
+      iframe.addEventListener("load", () => {
+        if(done) return;
+        done = true;
+        setTimeout(() => iframe.remove(), 300);
         resolve();
-      }, 3500);
+      });
+
+      iframe.src = cfg.apiUrl + "?" + params.toString();
+      document.body.appendChild(iframe);
+
+      // Fallback para Safari: a requisição já foi disparada quando src foi atribuído.
+      setTimeout(() => {
+        if(done) return;
+        done = true;
+        iframe.remove();
+        resolve();
+      }, 4000);
     });
   }
 

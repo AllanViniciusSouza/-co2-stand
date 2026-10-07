@@ -1,10 +1,12 @@
-# CO₂ Stand — v4 (formulário próprio)
+# CO₂ Stand v4.3 — envio robusto por GET
 
-## Arquitetura
-GitHub Pages → formulário próprio → Apps Script → Google Sheets → Cálculos → cards de resultados
+Esta versão evita POST/CORS/redirecionamentos do Safari.
 
-## Arquivos para o GitHub
-Envie para a raiz:
+## Apps Script
+Substitua o código do Apps Script pelo código completo fornecido no chat (igual ao arquivo AppsScript.gs deste pacote), publique uma nova implantação e envie a nova URL /exec para atualizar config.js se ela mudar.
+
+## GitHub
+Depois de atualizar a URL, envie:
 - index.html
 - formulario.html
 - registros.html
@@ -12,53 +14,3 @@ Envie para a raiz:
 - config.js
 - form.js
 - records.js
-
-## Importante: atualizar o Apps Script
-O Apps Script mudou: agora ele recebe os dados do formulário do site.
-
-1. Abra a planilha `CO₂ Stand - Respostas e Cálculos`.
-2. Extensões > Apps Script.
-3. Substitua todo o código pelo conteúdo de `AppsScript.gs`.
-4. Salve.
-5. Vá em Implantar > Gerenciar implantações.
-6. Edite a implantação existente (ícone de lápis).
-7. Em versão, escolha `Nova versão`.
-8. Clique em Implantar.
-
-Mantenha a mesma URL /exec. O `config.js` já está configurado para ela.
-
-## Lógica condicional implementada
-- Transporte:
-  - carro gasolina/diesel, moto e aplicativo/táxi → pessoas + distância + ocupação média
-  - ônibus/trem/metrô → pessoas + distância, sem ocupação
-  - a pé/bicicleta → pula pessoas/distância/ocupação para cálculo
-- Equipamento alto consumo:
-  - Sim → equipamento, quantidade, horas/dia
-  - Não → pula detalhes
-- Logística:
-  - Sim → veículo, distância, viagens
-  - Não → pula detalhes
-- Materiais:
-  - só mostra quantidade do material marcado
-- Resíduo:
-  - "Sei o valor em kg" → abre campo de kg
-- Alimentação:
-  - Sim → quantidade e tipo predominante
-  - Não → pula detalhes
-
-## Teclado numérico
-Campos de quantidade usam `inputmode="numeric"`.
-Campos de km, kg e horas usam `inputmode="decimal"`.
-
-
-## v4.1 — correção do envio no Safari/iPhone
-O envio agora usa POST por formulário HTML tradicional para um iframe invisível.
-Isso evita o problema de CORS/redirecionamento do `fetch()` com Apps Script.
-O `doGet()` também ignora linhas calculadas que não possuem Empresa/Projeto.
-
-
-## v4.2 — correção específica para iPhone/Safari
-- Evita que o iframe invisível seja removido durante o POST.
-- Mantém o formulário de envio ativo por 3,5 segundos para o Apps Script receber todos os parâmetros.
-- Adiciona cache-busting (`?v=42`) ao JavaScript, evitando que o Safari continue executando versões antigas.
-- Não exige alteração no Apps Script publicado nesta etapa.
