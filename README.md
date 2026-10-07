@@ -55,3 +55,10 @@ Campos de km, kg e horas usam `inputmode="decimal"`.
 O envio agora usa POST por formulário HTML tradicional para um iframe invisível.
 Isso evita o problema de CORS/redirecionamento do `fetch()` com Apps Script.
 O `doGet()` também ignora linhas calculadas que não possuem Empresa/Projeto.
+
+
+## v4.2 — correção específica para iPhone/Safari
+- Evita que o iframe invisível seja removido durante o POST.
+- Mantém o formulário de envio ativo por 3,5 segundos para o Apps Script receber todos os parâmetros.
+- Adiciona cache-busting (`?v=42`) ao JavaScript, evitando que o Safari continue executando versões antigas.
+- Não exige alteração no Apps Script publicado nesta etapa.

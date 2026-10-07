@@ -169,59 +169,51 @@
       }
 
       const frameName = "co2SubmitFrame_" + Date.now();
+
       const iframe = document.createElement("iframe");
       iframe.name = frameName;
       iframe.style.display = "none";
       iframe.setAttribute("aria-hidden", "true");
+      document.body.appendChild(iframe);
 
       const postForm = document.createElement("form");
       postForm.method = "POST";
       postForm.action = cfg.apiUrl;
       postForm.target = frameName;
+      postForm.enctype = "application/x-www-form-urlencoded";
+      postForm.acceptCharset = "UTF-8";
       postForm.style.display = "none";
 
       Object.entries(data).forEach(([key,value]) => {
         const input = document.createElement("input");
         input.type = "hidden";
         input.name = key;
-        input.value = value ?? "";
+        input.value = value == null ? "" : String(value);
         postForm.appendChild(input);
       });
 
-      let finished = false;
-      const cleanup = () => {
-        setTimeout(() => {
-          iframe.remove();
-          postForm.remove();
-        }, 500);
-      };
-
-      iframe.addEventListener("load", () => {
-        if(finished) return;
-        finished = true;
-        cleanup();
-        resolve();
-      });
-
-      document.body.appendChild(iframe);
       document.body.appendChild(postForm);
 
+      // Safari pode carregar about:blank no iframe antes do POST.
+      // Não usamos esse evento como confirmação e não removemos o iframe cedo.
       try{
         postForm.submit();
       }catch(err){
-        cleanup();
+        setTimeout(() => {
+          iframe.remove();
+          postForm.remove();
+        }, 1000);
         reject(err);
         return;
       }
 
-      // Fallback: Apps Script may block readable iframe load after redirect,
-      // but the POST itself is already sent.
+      // O Apps Script responde em outro domínio; não precisamos ler a resposta.
+      // Mantemos o alvo vivo por tempo suficiente para o Safari enviar o corpo.
       setTimeout(() => {
-        if(finished) return;
-        finished = true;
-        cleanup();
+        iframe.remove();
+        postForm.remove();
         resolve();
-      }, 2500);
+      }, 3500);
     });
   }
 
