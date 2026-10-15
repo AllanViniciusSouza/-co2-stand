@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0f5132">
   <title>Nova entrevista • CO₂ Stand</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=45">
 </head>
 <body>
 <header class="site-header inner">
@@ -21,6 +21,8 @@
   </div>
 
   <iframe name="submitFrame" id="submitFrame" class="hidden-submit-frame" aria-hidden="true"></iframe>
+  <div id="scopeNote" class="info-card">Considere o evento inteiro, com duração de referência de <strong id="eventHours">8</strong> horas. Transporte: informe apenas a ida; o cálculo inclui uma volta equivalente. Refeições e materiais: total da equipe no evento.</div>
+  <p id="draftStatus" class="field-help" role="status"></p>
   <form id="co2Form" novalidate>
     <!-- ETAPA 1 -->
     <section class="form-step active" data-step="1">
@@ -41,7 +43,7 @@
       </label>
 
       <label class="field">
-        <span>Quantas pessoas trabalham neste stand hoje? <b>*</b></span>
+        <span>Quantas pessoas compõem a equipe deste stand no evento? <b>*</b></span>
         <input name="pessoasStand" type="number" inputmode="numeric" pattern="[0-9]*" min="1" required placeholder="0">
       </label>
     </section>
@@ -51,10 +53,11 @@
       <div class="step-head">
         <span class="eyebrow green">Transporte da equipe</span>
         <h1>Como a equipe chegou?</h1>
+        <p>Esta versão estima o transporte do maior grupo. Se houver outros meios, o resultado indicará essa limitação. Exemplo: equipe de 6 pessoas, 4 vieram de carro, com 2 pessoas da equipe em cada carro.</p>
       </div>
 
       <fieldset class="field">
-        <legend>Qual foi o principal meio de transporte da equipe para chegar ao evento? <b>*</b></legend>
+        <legend>Qual meio de transporte foi usado pelo maior grupo da equipe? <b>*</b></legend>
         <div class="choice-grid">
           <label><input type="radio" name="transporte" value="Carro gasolina" required><span>Carro gasolina</span></label>
           <label><input type="radio" name="transporte" value="Carro diesel"><span>Carro diesel</span></label>
@@ -67,19 +70,19 @@
         </div>
       </fieldset>
 
-      <label class="field conditional transport-common hidden">
-        <span>Quantas pessoas utilizaram esse meio de transporte? <b>*</b></span>
+      <label class="field conditional transport-count hidden">
+        <span>Quantas pessoas da equipe vieram por esse meio? <b>*</b></span>
         <input name="pessoasTransporte" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="0">
       </label>
 
       <label class="field conditional transport-common hidden">
-        <span>Qual a distância aproximada de ida até o evento? <b>*</b></span>
+        <span>Qual a distância média de ida desse grupo até o evento? <b>*</b></span>
         <div class="input-unit"><input name="distanciaEquipe" type="number" inputmode="decimal" min="0" step="0.1" placeholder="0"><span>km</span></div>
       </label>
 
       <label class="field conditional vehicle-occupancy hidden">
-        <span>Quantas pessoas viajaram no mesmo veículo, em média? <b>*</b></span>
-        <input name="ocupacaoVeiculo" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="0">
+        <span>Em média, quantas pessoas da equipe vieram em cada veículo? <b>*</b></span>
+        <input name="ocupacaoVeiculo" type="number" inputmode="decimal" step="0.1" min="1" placeholder="Ex.: 2">
       </label>
 
       <div id="walkNote" class="info-card hidden">A pé ou bicicleta: não serão solicitadas distância e ocupação para o cálculo de transporte.</div>
@@ -90,7 +93,7 @@
       <div class="step-head">
         <span class="eyebrow green">Energia</span>
         <h1>Equipamentos do stand</h1>
-        <p>Nos campos numéricos, o iPhone abrirá diretamente o teclado de números.</p>
+        <p>Conte apenas equipamentos do stand. A energia usa potências padrão e a duração de referência do evento.</p>
       </div>
 
       <label class="field">
@@ -109,7 +112,7 @@
       </label>
 
       <fieldset class="field">
-        <legend>Existe algum equipamento de maior consumo além desses? <b>*</b></legend>
+        <legend>Há outros equipamentos elétricos além de notebooks, TVs e iluminação? <b>*</b></legend>
         <div class="segmented">
           <label><input type="radio" name="equipAlto" value="Sim" required><span>Sim</span></label>
           <label><input type="radio" name="equipAlto" value="Não"><span>Não</span></label>
@@ -117,16 +120,17 @@
       </fieldset>
 
       <div id="extraEquipment" class="conditional-panel hidden">
+        <p class="field-help">Estimativa simplificada: todos os equipamentos adicionais usam uma potência padrão. Informe a quantidade total e a média de horas de uso.</p>
         <label class="field">
-          <span>Qual equipamento adicional é utilizado? <b>*</b></span>
-          <input name="equipNome" type="text" placeholder="Ex.: impressora 3D">
+          <span>Quais outros equipamentos são utilizados? <b>*</b></span>
+          <input name="equipNome" type="text" placeholder="Ex.: 2 impressoras 3D e 1 frigobar">
         </label>
         <label class="field">
-          <span>Quantos equipamentos adicionais existem? <b>*</b></span>
+          <span>Quantos outros equipamentos existem ao todo? <b>*</b></span>
           <input name="equipQtd" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="0">
         </label>
         <label class="field">
-          <span>Aproximadamente quantas horas por dia esse equipamento fica ligado? <b>*</b></span>
+          <span>Em média, por quantas horas cada um fica ligado durante o evento inteiro? <b>*</b></span>
           <div class="input-unit"><input name="equipHoras" type="number" inputmode="decimal" min="0" step="0.1" placeholder="0"><span>h</span></div>
         </label>
       </div>
@@ -137,10 +141,11 @@
       <div class="step-head">
         <span class="eyebrow green">Logística</span>
         <h1>Transporte de materiais</h1>
+        <p>Não repita uma viagem já informada no transporte da equipe. Se os materiais vieram junto, sem viagem extra, marque “Não”. Cada ida informada inclui uma volta equivalente no cálculo.</p>
       </div>
 
       <fieldset class="field">
-        <legend>Foi utilizado algum veículo para transportar materiais ou equipamentos do stand? <b>*</b></legend>
+        <legend>Houve viagens adicionais ou exclusivas para levar materiais ao stand? <b>*</b></legend>
         <div class="segmented">
           <label><input type="radio" name="logistica" value="Sim" required><span>Sim</span></label>
           <label><input type="radio" name="logistica" value="Não"><span>Não</span></label>
@@ -165,7 +170,7 @@
         </label>
 
         <label class="field">
-          <span>Quantas viagens de ida foram necessárias? <b>*</b></span>
+          <span>Quantas viagens adicionais de ida foram necessárias? <b>*</b></span>
           <input name="viagensLog" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="0">
         </label>
       </div>
@@ -176,10 +181,11 @@
       <div class="step-head">
         <span class="eyebrow green">Materiais e resíduos</span>
         <h1>O que o stand utiliza e descarta?</h1>
+        <p>Materiais são as unidades utilizadas ou distribuídas. Resíduos são o peso do lixo gerado; o cálculo separa produção de materiais e tratamento do descarte.</p>
       </div>
 
       <fieldset class="field">
-        <legend>O stand utiliza ou distribui algum destes materiais?</legend>
+        <legend>Quais destes materiais o stand utiliza ou distribui durante o evento?</legend>
         <div class="check-grid">
           <label><input type="checkbox" name="materiais" value="Folders ou impressos"><span>Folders ou impressos</span></label>
           <label><input type="checkbox" name="materiais" value="Copos plásticos"><span>Copos plásticos</span></label>
@@ -189,17 +195,17 @@
       </fieldset>
 
       <label class="field material-qty hidden" data-for="Folders ou impressos">
-        <span>Quantidade aproximada de folders ou impressos <b>*</b></span>
+        <span>Total de folders ou impressos utilizados/distribuídos no evento <b>*</b></span>
         <input name="folders" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0">
       </label>
 
       <label class="field material-qty hidden" data-for="Copos plásticos">
-        <span>Quantidade aproximada de copos plásticos <b>*</b></span>
+        <span>Total de copos plásticos utilizados/distribuídos no evento <b>*</b></span>
         <input name="copos" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0">
       </label>
 
       <label class="field material-qty hidden" data-for="Garrafas PET">
-        <span>Quantidade aproximada de garrafas PET <b>*</b></span>
+        <span>Total de garrafas PET utilizadas/distribuídas no evento <b>*</b></span>
         <input name="pet" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="0">
       </label>
 
@@ -208,8 +214,8 @@
         <div class="choice-list">
           <label><input type="radio" name="residuoFaixa" value="Nenhum" required><span>Nenhum</span></label>
           <label><input type="radio" name="residuoFaixa" value="Menos de 1 kg"><span>Menos de 1 kg</span></label>
-          <label><input type="radio" name="residuoFaixa" value="Entre 1 e 5 kg"><span>Entre 1 e 5 kg</span></label>
-          <label><input type="radio" name="residuoFaixa" value="Entre 5 e 10 kg"><span>Entre 5 e 10 kg</span></label>
+          <label><input type="radio" name="residuoFaixa" value="Entre 1 e 5 kg"><span>De 1 até 5 kg</span></label>
+          <label><input type="radio" name="residuoFaixa" value="Entre 5 e 10 kg"><span>Acima de 5 até 10 kg</span></label>
           <label><input type="radio" name="residuoFaixa" value="Mais de 10 kg"><span>Mais de 10 kg</span></label>
           <label><input type="radio" name="residuoFaixa" value="Sei o valor em kg"><span>Sei o valor em kg</span></label>
           <label><input type="radio" name="residuoFaixa" value="Não sei"><span>Não sei</span></label>
@@ -217,10 +223,11 @@
       </fieldset>
 
       <label id="exactWasteWrap" class="field hidden">
-        <span>Se souber, informe aproximadamente quantos kg <b>*</b></span>
+        <span>Qual é a quantidade estimada de resíduos, em kg? <b>*</b></span>
         <div class="input-unit"><input name="residuoKg" type="number" inputmode="decimal" min="0" step="0.1" placeholder="0"><span>kg</span></div>
       </label>
 
+      <div id="wasteDetails">
       <fieldset class="field">
         <legend>Qual é o principal tipo de resíduo gerado? <b>*</b></legend>
         <div class="choice-grid">
@@ -240,6 +247,7 @@
           <label><input type="radio" name="destinoResiduo" value="Não sei"><span>Não sei</span></label>
         </div>
       </fieldset>
+      </div>
     </section>
 
     <!-- ETAPA 6 -->
@@ -250,7 +258,7 @@
       </div>
 
       <fieldset class="field">
-        <legend>A empresa fornece refeições para a equipe durante o evento? <b>*</b></legend>
+        <legend>A empresa fornece ou custeia refeições para a equipe neste evento? <b>*</b></legend>
         <div class="segmented">
           <label><input type="radio" name="refeicoes" value="Sim" required><span>Sim</span></label>
           <label><input type="radio" name="refeicoes" value="Não"><span>Não</span></label>
@@ -258,8 +266,9 @@
       </fieldset>
 
       <div id="mealDetails" class="conditional-panel hidden">
+        <p class="field-help">Exemplo: 5 pessoas com 2 refeições cada = 10 refeições. Refeições compradas pela própria equipe não entram neste escopo.</p>
         <label class="field">
-          <span>Quantas refeições serão fornecidas aproximadamente? <b>*</b></span>
+          <span>Quantas refeições serão fornecidas à equipe inteira durante todo o evento? <b>*</b></span>
           <input name="refeicoesQtd" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="0">
         </label>
 
@@ -276,34 +285,46 @@
 
       <label class="field">
         <span>O stand possui alguma ação para reduzir seu impacto ambiental?</span>
-        <textarea name="acaoAmbiental" rows="3" placeholder="Opcional. Ex.: coleta seletiva, material reutilizável, redução de impressos..."></textarea>
+        <textarea name="acaoAmbiental" rows="3" maxlength="1000" style="resize: none" placeholder="Opcional. Ex.: coleta seletiva, material reutilizável, redução de impressos..."></textarea>
       </label>
 
       <div class="review-card">
         <strong>Pronto para enviar</strong>
-        <p>Após o envio, o registro será gravado diretamente na planilha e entrará nos cálculos do projeto.</p>
+        <p>Confira as respostas usando “Voltar”. Ao finalizar, aguarde a confirmação de salvamento e o resultado desta entrevista.</p>
       </div>
     </section>
 
-    <div id="formError" class="form-error hidden"></div>
+    <div id="formError" class="form-error hidden" role="alert" tabindex="-1"></div>
 
     <div class="form-actions">
-      <button id="prevBtn" class="btn secondary hidden" type="button">← Voltar</button>
-      <button id="nextBtn" class="btn primary" type="button">Próximo →</button>
-      <button id="submitBtn" class="btn primary hidden" type="submit">Enviar levantamento</button>
+      <button id="prevBtn" class="btn secondary hidden" type="button" disabled>← Voltar</button>
+      <button id="nextBtn" class="btn primary" type="button" disabled>Próximo →</button>
+      <button id="submitBtn" class="btn primary hidden" type="submit" disabled>Finalizar entrevista</button>
     </div>
   </form>
 
-  <section id="successView" class="success-view hidden">
-    <div class="success-icon">✓</div>
-    <h1>Stand registrado</h1>
-    <p>Os dados foram enviados para a planilha de cálculo.</p>
-    <a class="btn primary link-btn" href="index.html">Voltar ao início</a>
-    <button id="newEntryBtn" class="btn secondary" type="button">Cadastrar outro stand</button>
+  <section id="successView" class="success-view hidden" aria-labelledby="successTitle">
+    <div class="success-icon" aria-hidden="true">✓</div>
+    <h1 id="successTitle" tabindex="-1">Entrevista concluída</h1>
+    <p id="savedIdentity"></p>
+    <div id="resultStatus" role="status" aria-live="polite"></div>
+    <div id="interviewResult" class="hidden">
+      <div class="result-total"><span id="resultLabel">Emissão estimada</span><strong id="resultTotal"></strong></div>
+      <p id="resultSource"></p>
+      <dl id="resultBreakdown" class="result-breakdown"></dl>
+      <ul id="resultNotes" class="result-notes"></ul>
+      <p class="field-help">Estimativa em kg de CO₂ equivalente. A planilha utiliza fatores provisórios e premissas de potência e peso; o valor não é uma medição direta.</p>
+    </div>
+    <button id="retryResultBtn" class="btn secondary hidden" type="button" disabled>Consultar resultado novamente</button>
+    <button id="newEntryBtn" class="btn primary" type="button" disabled>Nova entrevista</button>
+    <a class="btn secondary link-btn" href="registros.html">Ver todos os resultados</a>
+    <a class="back-link" href="index.html">Voltar ao início</a>
   </section>
 </main>
+<noscript><p class="method-note">Ative o JavaScript para preencher e salvar a entrevista.</p></noscript>
 
-<script src="config.js?v=44"></script>
-<script src="form.js?v=44"></script>
+<script src="config.js?v=45"></script>
+<script src="api.js?v=45"></script>
+<script src="form.js?v=45"></script>
 </body>
 </html>
