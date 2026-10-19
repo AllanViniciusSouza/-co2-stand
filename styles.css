@@ -12,6 +12,9 @@ a{text-decoration:none;color:inherit}button,input,textarea{font:inherit}
 .hero{border-radius:26px;padding:30px 22px;color:#fff;background:linear-gradient(145deg,#0c432a,#178050)}.hero h1{margin:11px 0 10px;font-size:clamp(31px,7vw,49px);line-height:1.04;letter-spacing:-.025em}.hero p{margin:0;font-size:17px;line-height:1.5;color:#eff7f2}
 .eyebrow{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:850;letter-spacing:.04em;text-transform:uppercase;background:rgba(255,255,255,.16)}.eyebrow.green{background:var(--green-soft);color:var(--green)}
 .hero-meta{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}.hero-meta span{padding:7px 10px;border-radius:10px;background:rgba(255,255,255,.12);font-size:13px}
+.hero-identity{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.unisal-logo{display:block;width:150px;max-width:100%;height:auto;flex-shrink:0}
+@media(max-width:430px){.hero-identity{gap:12px}.hero-identity .eyebrow{font-size:10px}.unisal-logo{width:120px}}
 .quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.quick-card{min-height:90px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:13px;padding:17px;border-radius:19px;border:1px solid var(--line);background:var(--card)}.quick-card.primary{background:#edf7f0;border-color:#bdd8c6}.quick-icon{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:var(--green-soft);color:var(--green);font-size:24px;font-weight:700}.quick-card strong{display:block;font-size:17px}.quick-card small{display:block;margin-top:3px;color:var(--muted);font-size:13px}.arrow{font-size:30px;color:#839087}
 .section-card{margin-top:14px;padding:20px;border:1px solid var(--line);border-radius:22px;background:#fff}.section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:15px}.section-title span{font-size:20px;font-weight:850}.section-title small{color:var(--muted)}.steps-home{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.step-home{min-width:0;padding:14px;border:1px solid var(--line);border-radius:16px;background:#fbfdfb}.step-home span{display:grid;place-items:center;width:30px;height:30px;margin-bottom:8px;border-radius:9px;background:var(--green-soft);color:var(--green);font-weight:850}.step-home strong,.step-home small{display:block}.step-home small{margin-top:5px;color:var(--muted)}
 .method-note{margin-top:14px;padding:18px 19px;border-left:4px solid var(--green2);border-radius:14px;background:#edf4ef}.method-note p{margin:6px 0 0;color:#4e5b53;line-height:1.5}
@@ -78,3 +81,37 @@ input:disabled,textarea:disabled{opacity:.65}
 button:disabled{opacity:.65;cursor:wait}
 input,textarea,[tabindex="-1"]{scroll-margin-top:130px;scroll-margin-bottom:95px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+
+/* Pessoas e visão de resultados usam os mesmos tokens e controles dos stands. */
+select{font:inherit;width:100%;min-height:50px;border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:12px;color:var(--text);cursor:pointer}
+select:disabled{opacity:.65;cursor:default}
+.trip-panel{margin-top:16px;padding:0 12px 14px;border:1px solid var(--line);border-radius:17px;background:var(--green-soft)}
+.trip-panel h2{font-size:20px;margin-bottom:4px}
+.review-card p+p{margin-top:12px}
+.result-filters{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.result-filters a,.page-link{display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-weight:700;color:var(--green)}
+.result-filters a[aria-current=page]{background:var(--green);color:var(--card)}
+.summary-group{margin-top:24px}.summary-group h2{font-size:21px;margin:0}.summary-group .summary-cards{margin-top:10px}
+.summary-card,.record-card{min-width:0;overflow-wrap:anywhere}
+summary{cursor:pointer;color:var(--green);font-weight:700;padding:14px 0;min-height:44px}
+button:not(:disabled),a,select,summary{cursor:pointer}
+a:hover,summary:hover{filter:brightness(.92)}
+button:not(:disabled):hover{filter:brightness(.94)}
+button:not(:disabled):active,a:active{filter:brightness(.88)}
+.toolbar button{min-height:44px}
+.result-breakdown{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+select{scroll-margin-top:130px;scroll-margin-bottom:95px}
+@media(forced-colors:active){:root{scrollbar-color:auto}.result-filters a[aria-current=page]{outline:2px solid Highlight}}
+
+/* Sugestões por toque sem abrir teclado e escolhas sempre visíveis. */
+.field>label{display:block}.field>label>span{display:block;font-size:16px;font-weight:760;line-height:1.35;margin-bottom:10px}
+.quick-values{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.quick-values>.field-help{flex-basis:100%;font-size:12px}
+.quick-values button{min-width:44px;min-height:44px;padding:8px 13px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--green);font-weight:700;touch-action:manipulation}
+.quick-values button[aria-pressed=true]{background:var(--green-soft);border-color:var(--green2)}
+.copy-trip{display:block;width:100%;margin-top:14px}
+[data-interview=person] .choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+[data-interview=person] .choice-grid span{height:100%;overflow-wrap:anywhere;cursor:pointer}
+[data-interview=person] .choice-grid input:disabled+span{opacity:.65;cursor:default}
+[data-interview=person] .choice-grid input:not(:disabled)+span:hover{border-color:var(--green2)}
+[data-interview=person] .choice-grid input:not(:disabled)+span:active{background:var(--green-soft)}

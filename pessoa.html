@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0f5132">
+  <title>Nova entrevista Pessoa • CO₂ Stand</title>
+  <link rel="stylesheet" href="styles.css?v=48">
+</head>
+<body data-interview="person">
+<header class="site-header inner">
+  <a class="back-link" href="index.html">← Início</a>
+  <div class="page-title">Nova entrevista Pessoa</div>
+  <span class="header-spacer"></span>
+</header>
+
+<main class="form-page">
+  <div class="progress-wrap">
+    <div class="progress-meta"><span id="stepLabel">Etapa 1 de 4</span><span id="progressPct">25%</span></div>
+    <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+  </div>
+
+  <iframe name="submitFrame" id="submitFrame" class="hidden-submit-frame" aria-hidden="true"></iframe>
+  <div id="scopeNote" class="info-card">“Estamos estimando a pegada de carbono de quem participa do evento. Podemos fazer algumas perguntas sobre sua ida, permanência e volta? Não precisamos do seu nome.”<br>Evento de dois dias, com coleta em um único dia. Considere a participação do visitante: ida de hoje já realizada, volta prevista e outros deslocamentos, quando houver.</div>
+  <p id="draftStatus" class="field-help" role="status"></p>
+  <form id="co2Form" novalidate>
+    <div id="personSteps"></div>
+    <div id="formError" class="form-error hidden" role="alert" tabindex="-1"></div>
+
+    <div class="form-actions">
+      <button id="prevBtn" class="btn secondary hidden" type="button" disabled>← Voltar</button>
+      <button id="nextBtn" class="btn primary" type="button" disabled>Próximo →</button>
+      <button id="submitBtn" class="btn primary hidden" type="submit" disabled>Finalizar entrevista</button>
+    </div>
+  </form>
+
+  <section id="successView" class="success-view hidden" aria-labelledby="successTitle">
+    <div class="success-icon" aria-hidden="true">✓</div>
+    <h1 id="successTitle" tabindex="-1">Entrevista concluída</h1>
+    <p id="savedIdentity"></p>
+    <div id="resultStatus" role="status" aria-live="polite"></div>
+    <div id="interviewResult" class="hidden">
+      <div class="result-total"><span id="resultLabel">Emissão estimada</span><strong id="resultTotal"></strong></div>
+      <p id="resultSource"></p>
+      <dl id="resultBreakdown" class="result-breakdown"></dl>
+      <ul id="resultNotes" class="result-notes"></ul>
+      <p class="field-help">Estimativa em kg de CO₂ equivalente. Fatores provisórios e aproximações limitam a precisão. Atividades sem informação ou fator ficam fora do subtotal.</p>
+    </div>
+    <button id="retryResultBtn" class="btn secondary hidden" type="button" disabled>Consultar resultado novamente</button>
+    <button id="newEntryBtn" class="btn primary" type="button" disabled>Nova entrevista Pessoa</button>
+    <a class="btn secondary link-btn" href="registros.html">Ver todos os resultados</a>
+    <a class="back-link" href="index.html">Voltar ao início</a>
+  </section>
+</main>
+<noscript><p class="method-note">Ative o JavaScript para preencher e salvar a entrevista.</p></noscript>
+
+<script src="config.js?v=45"></script>
+<script src="api.js?v=49"></script>
+<script src="pessoa.js?v=48"></script>
+<script src="form.js?v=50"></script>
+</body>
+</html>

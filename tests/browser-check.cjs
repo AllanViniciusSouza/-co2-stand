@@ -1,0 +1,37 @@
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const assert=require('node:assert/strict');
+(async()=>{
+ const browser=await chromium.launch({headless:true,channel:'msedge'});
+ const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});
+ const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('http://127.0.0.1:4173/');
+ await page.getByRole('link',{name:/Nova entrevista Pessoa/}).click();
+ const choose=async(name,value)=>page.locator(`[name="${name}"][value="${value}"]`).locator('..').click();
+ const quick=async(name,value)=>page.locator(`[data-fill="${name}"][data-value="${value}"]`).click();
+ await quick('origin','Mesma cidade do evento');await choose('participation','Hoje e amanhã');await choose('mainReason','Sim');
+ assert.equal(await page.locator('select').count(),0);
+ await page.evaluate(()=>scrollTo(0,0));
+ await page.screenshot({path:'tests/person-participation-mobile.png',fullPage:true});
+ await page.getByRole('button',{name:'Próximo →'}).click();
+ await choose('trip0Mode','Carro gasolina');await quick('trip0Km','10');await quick('trip0Occupants','2');
+ await page.getByRole('button',{name:'Usar os mesmos dados na volta'}).click();
+ assert.equal(await page.locator('[name=trip1Km]').inputValue(),'10');
+ await choose('trip1Mode','Ônibus');await quick('trip1Km','20');await choose('otherTravel','Repetir ida e volta de hoje');
+ await page.evaluate(()=>scrollTo(0,0));
+ await page.screenshot({path:'tests/person-mobile.png',fullPage:true});
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+ await page.getByRole('button',{name:'Próximo →'}).click();
+ for(let i=0;i<4;i++){await quick(`meal${i}Done`,'0');await quick(`meal${i}Planned`,'0');}
+ await quick('meal1Planned','1');await choose('stayType','Não');
+ await page.getByRole('button',{name:'Próximo →'}).click();await page.getByRole('button',{name:'Finalizar entrevista'}).click();
+ await page.locator('#successView').waitFor({state:'visible'});assert.match(await page.locator('#savedIdentity').textContent(),/Registro salvo/);
+ assert.match(await page.locator('#resultTotal').textContent(),/8,216/);
+ await page.screenshot({path:'tests/person-result-mobile.png',fullPage:true});
+ await page.getByRole('link',{name:'Ver todos os resultados'}).click();await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Dados atualizados'));
+ await page.getByRole('link',{name:'Pessoas',exact:true}).click();await page.getByText('Detalhar resultado').first().click();
+ await page.screenshot({path:'tests/results-mobile.png',fullPage:true});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+ await page.setViewportSize({width:1280,height:900});await page.getByRole('link',{name:'Visão geral'}).click();await page.screenshot({path:'tests/results-desktop.png',fullPage:true});
+ await page.goto('http://127.0.0.1:4173/formulario.html');await page.locator('[name=empresa]').fill('Stand teste');await page.getByRole('button',{name:'Próximo →'}).click();assert.equal(await page.locator('[name=stand]').getAttribute('aria-invalid'),'true');
+ await page.screenshot({path:'tests/stand-desktop.png',fullPage:true});
+ assert.deepEqual(errors,[]);console.log('Browser OK: mobile/desktop, touch choices and quick-fill, person create/result/list, stand validation, no overflow or JS errors.');await browser.close();
+})().catch(e=>{console.error(e);process.exit(1);});

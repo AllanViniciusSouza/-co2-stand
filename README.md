@@ -1,12 +1,12 @@
-# CO₂ Stand v4.5
+# CO₂ Stand v4.8
 
-Entrevista em seis etapas, roteiro de apresentação no início e resultado individual na conclusão.
+Entrevistas de stands (seis etapas) e pessoas visitantes (quatro etapas), com resultado individual na conclusão.
 HTML/CSS/JavaScript estáticos, com Google Apps Script e a planilha existente como fonte de cálculo.
 
 ## Publicação obrigatória desta versão
 
 O código local não atualiza automaticamente a implantação do Google Apps Script nem o site publicado.
-Publique o backend antes do frontend. A v4.5 exige o protocolo novo; ela preserva o rascunho quando
+Publique o backend antes do frontend. A v4.8 exige o protocolo de stands v45 e a capacidade personVersion:2; ela preserva o rascunho quando
 não consegue confirmá-lo. Não publique somente o formulário.
 
 1. Na planilha **CO₂ Stand - Respostas e Cálculos**, abra **Extensões → Apps Script**.
@@ -15,9 +15,10 @@ não consegue confirmá-lo. Não publique somente o formulário.
    e implante. Preserve o URL `/exec`, a identidade de execução e os acessos existentes. Se o URL mudar,
    atualize `config.js` antes de publicar o frontend.
 4. Publique os arquivos estáticos: `index.html`, `formulario.html`, `registros.html`, `styles.css`,
-   `config.js`, `api.js`, `form.js` e `records.js`. O cache usa `?v=45`.
+   `pessoa.html`, `pessoa.js`, `config.js`, `api.js`, `form.js`, `records.js` e a pasta `assets` com o logo da UNISAL.
+   Estilos e scripts alterados usam `?v=48`; config.js e api.js permanecem em `?v=45`.
 
-Verificação de implantação: `GET <apiUrl>?action=meta` deve retornar `ok: true`, `version: 45` e a duração
+Verificação de implantação: `GET <apiUrl>?action=meta` deve retornar `ok: true`, `version: 45`, `personVersion: 2` e a duração
 da aba Fatores. Não é necessário cadastrar uma entrevista fictícia para verificar a versão.
 
 ## Planilha e compatibilidade
@@ -78,3 +79,62 @@ As leituras usam JSONP com nomes de callback restritos, sem depender de CORS do 
 A tela de sucesso depende de `action=status&requestId=...`, nunca de um temporizador de sucesso.
 Falha/timeout mantém o rascunho e bloqueia edição do envio incerto até a verificação com o mesmo ID.
 Os erros são inline, com foco e associação ao campo; movimentos respeitam a preferência do sistema.
+
+## Versão com visitantes (frontend v48; protocolo de stands v45 preservado)
+
+### Publicação
+Atualize a implantação com **todo o AppsScript.gs**, antes do frontend. `action=meta` continua
+retornando `version:45` para os stands e acrescenta `personVersion:2`. O formulário Pessoa e o
+painel verificam essa capacidade; backend antigo não é confundido com uma base vazia.
+Inclua `pessoa.html` e `pessoa.js`, além dos arquivos já publicados. Use as referências de cache
+presentes nos HTMLs. A implementação local não publica o Apps Script nem o site automaticamente.
+
+### Armazenamento escolhido
+Manter a mesma planilha, com uma aba **Pessoas**, criada no primeiro envio válido. Não há migração
+ou alteração das abas antigas. A aba tem 12 colunas: ID UUID, data UTC ISO, versão do esquema,
+origem, dias realizados, dias previstos, emissão realizada, prevista, total, indicador parcial,
+respostas JSON e resultado/fatores JSON. As colunas escalares permitem filtros e resumos no Sheets;
+os JSONs preservam trechos variáveis, refeições por tipo, desconhecidos (`null`) e a rastreabilidade.
+Uma única linha grava respostas e cálculo juntos, sob lock e com proteção idempotente por ID.
+Cabeçalhos divergentes interrompem o envio em vez de sobrescrever dados existentes.
+
+O servidor calcula usando os códigos e unidades conferidos da aba Fatores, e guarda no resultado
+um snapshot dos fatores efetivamente usados (valor, unidade, ano, status e fonte) e `person-v2` (registros antigos preservam `person-v1`).
+Resultados históricos de pessoas não são recalculados ao mudar fatores. Não é necessária outra
+planilha ou banco para este evento; em uma escala maior, respostas e atividades podem virar tabelas
+relacionadas por ID mantendo este contrato. Filtros e paginação visual são locais, em lotes de 12;
+a API ainda lê a base inteira, adequado ao protótipo, não a bases de grande volume.
+
+### Escopo e metodologia
+- Pessoas: abrir o formulário já define o público como visitante. Não há pergunta sobre perfil
+  ou entrevista anterior. A proteção contra duplicidade cobre reenvio do mesmo ID, não entrevistas
+  distintas da mesma pessoa. O backend mantém compatibilidade com envios v1 já pendentes.
+- A coleta acontece em um único dia de um evento de dois dias. Ida de hoje é realizada e volta
+  de hoje é prevista, uma vez cada, sem pergunta de período. A participação pode ser só hoje,
+  hoje/amanhã, ontem/hoje ou outro dia incerto. Outro dia exige escolha explícita: repetir os dois
+  percursos, informar outro percurso, sem nova viagem ou desconhecido. Só os trechos adicionais
+  pedem período/repetições. Hospedagem registra noites reais (antes/entre/depois), nunca dias × noites.
+- Opções são rádios em cartões tocáveis, sem dropdown. Todos os campos textuais/numéricos do
+  visitante têm sugestões rápidas; tocar preenche, desmarca Não sei e salva rascunho sem focar input.
+  A volta pode copiar os dados da ida e continuar editável.
+- Carro/moto/táxi: veículo-km dividido pela ocupação; ônibus/trem/metrô: passageiro-km, sem divisão.
+- A pé/bicicleta: zero de emissão direta. Avião, van de passageiros, etanol/elétrico/flex desconhecido
+  ficam sem cálculo até existir metodologia apropriada; não se reutiliza fator de van de logística.
+- Refeições bovina/frango/vegetariana usam proxies existentes. Outro/desconhecido não assume média.
+- Hospedagem registra tipo e noites, sem fator inventado. Ausência de hospedagem é zero; noites
+  positivas/desconhecidas são uma parcela ausente. Não há extrapolação de visitantes para o público.
+- Viagens com outros motivos preservam todos os trechos declarados, com nota sobre atribuição.
+- Subtotais somam parcelas conhecidas; resultado parcial identifica o que faltou. Categorias e
+  períodos também podem ter subtotais. Os fatores existentes continuam provisórios; sua validação
+  científica não faz parte desta alteração.
+- Painel separa bases porque refeições e deslocamentos podem coincidir. Cobertura de stands conta
+  identificadores distintos sobre 33; a soma mantém todas as entrevistas, sinalizando repetição possível.
+
+### Teste seguro
+`node tests/server.cjs --mock-api` usa o cálculo de pessoas com fatores de demonstração e memória
+local. Não modifica a planilha. `npm test` inclui cálculos, unidades, desconhecidos, validação,
+salvamento idempotente, rascunho, envio incerto e regressão do formulário Stand.
+
+Verificação visual opcional: com Playwright instalado e Edge disponível, inicie o servidor simulado
+e execute `node tests/browser-check.cjs`. `PLAYWRIGHT_MODULE` permite apontar para uma instalação
+externa de Playwright. As imagens ficam em `tests/` e só contêm dados fictícios.

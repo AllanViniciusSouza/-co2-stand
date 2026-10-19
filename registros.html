@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0f5132">
   <title>Resultados • CO₂ Stand</title>
-  <link rel="stylesheet" href="styles.css?v=45">
+  <link rel="stylesheet" href="styles.css?v=48">
 </head>
 <body>
 <header class="site-header inner">
@@ -17,22 +17,25 @@
 <main class="page records-page">
   <section class="records-hero">
     <span class="eyebrow green">Visão consolidada</span>
-    <h1>Registros dos stands</h1>
-    <p>Resultados calculados automaticamente a partir da planilha.</p>
+    <h1>Resultados do evento</h1>
+    <p>Acompanhe a coleta dos 33 stands e a amostra de visitantes, com resultados separados.</p>
   </section>
 
-  <section id="summaryCards" class="summary-cards"></section>
+  <nav class="result-filters" aria-label="Filtrar entrevistas"><a href="?tipo=todos" data-type="todos">Visão geral</a><a href="?tipo=stand" data-type="stand">Stands</a><a href="?tipo=person" data-type="person">Pessoas</a></nav>
+  <div id="summaryCards" aria-live="polite"></div>
+  <p class="method-note">Stands e pessoas têm escopos diferentes. Não some as duas bases: refeições e deslocamentos podem se repetir. Os visitantes entrevistados são uma amostra, sem extrapolação para todo o público.</p>
 
   <div class="toolbar">
-    <span id="status">Carregando registros…</span>
+    <span id="status" role="status">Carregando registros…</span>
     <button id="refreshBtn" type="button" disabled>Atualizar</button>
   </div>
 
   <section id="recordList" class="record-list" aria-live="polite"></section>
+  <nav id="pagination" class="toolbar" aria-label="Páginas de resultados"></nav>
 </main>
 
 <script src="config.js?v=45"></script>
-<script src="api.js?v=45"></script>
-<script src="records.js?v=45"></script>
+<script src="api.js?v=49"></script>
+<script src="records.js?v=48"></script>
 </body>
 </html>
