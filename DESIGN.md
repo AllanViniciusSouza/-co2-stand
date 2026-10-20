@@ -3,13 +3,13 @@ version: alpha
 name: CO₂ Stand
 description: Entrevista acadêmica guiada em celular, com resultado estimado por stand.
 colors:
-  primary: "#0f5132"
-  secondary: "#18794e"
-  background: "#f4f7f5"
+  primary: "#0050a0"
+  secondary: "#0050a0"
+  background: "#f4f7fb"
   surface: "#ffffff"
-  text: "#18211c"
-  muted: "#66716a"
-  border: "#dce6df"
+  text: "#18212c"
+  muted: "#5f6d7e"
+  border: "#dce4ef"
   danger: "#b42318"
 typography:
   sans:
@@ -31,13 +31,13 @@ components:
 
 ## Overview
 Ferramenta em português brasileiro para Allan conduzir entrevistas em stands pelo celular.
-Preservar a identidade verde existente. A assinatura é a coleta guiada em seis
+Usar o azul institucional UNISAL #0050A0 (RGB 0, 80, 160). A assinatura é a coleta guiada em seis
 etapas e um resultado destacado. Priorizar leitura rápida, familiaridade e dados compreensíveis.
 Não transformar a coleta em uma página de marketing. A fonte canônica dos tokens é styles.css;
 este documento registra suas cores, dimensões e usos, sem gerar um segundo tema.
 
 ## Colors
-Verde escuro para ações primárias e resultados, verde claro para orientações, branco para campos.
+Azul institucional para ações primárias e resultados, azul claro para orientações, branco para campos.
 Erros usam texto e borda vermelha; sucesso exige confirmação real, não só cor ou temporizador.
 
 ## Typography
@@ -55,7 +55,7 @@ Usar bordas e fundos suaves, sem sombras decorativas em cards. Cabeçalho e prog
 Campos com 17px, botões com 14px e resultado com 19px de raio, conforme styles.css.
 
 ## Components
-O logo branco oficial da UNISAL aparece no cabeçalho fixo das quatro telas, sobre fundo verde. Preservar proporção, cores e respiro; arquivo local em
+O logo branco oficial da UNISAL aparece no cabeçalho fixo das quatro telas, sobre fundo azul. Preservar proporção, cores e respiro; arquivo local em
 `assets/unisal-branco.svg`, obtido do site institucional. Não aplicar filtros ou recortar.
 Formulário e validação: form.js. Transporte de API e formatação numérica: api.js.
 Tokens, scrollbar e controles: styles.css. Resultado final reutiliza as cores dos registros.
@@ -83,3 +83,8 @@ Ida/volta de hoje têm períodos fixos; outro dia exige escolha explícita. Noit
 Resultados: filtros Visão geral / Stands / Pessoas, totais independentes, detalhes expansíveis,
 12 registros por página, filtro e página na URL. Nunca usar total global entre modalidades.
 Comportamento e responsáveis estão registrados em UX-CONTRACT.md.
+
+## Referência cromática UNISAL
+Manual oficial SIV 2019, página 9: RGB 0, 80, 160 (#0050A0).
+Fonte: https://drive.google.com/file/d/1Nn0opCqsq1RiSnbrDb8dJspzftZg38KI/view (vinculado por https://unisal.edu.br/siv/).
+styles.css é a fonte canônica: colors.primary → --brand; colors.secondary → --brand-accent; fundos de destaque → --brand-soft. Os demais tons azuis são adaptações da interface, não novas cores oficiais.

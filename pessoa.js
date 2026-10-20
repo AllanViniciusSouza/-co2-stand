@@ -9,7 +9,7 @@
     return `<div class="field"><label for="${name}"><span>${label}</span><input id="${name}" type="number" inputmode="${name.endsWith('Km')?'decimal':'numeric'}" name="${name}" min="${min}" max="100000" step="${name.endsWith('Km')?'any':'1'}" required value="${value}"></label>${quick(name,suggestions)}</div>`;
   };
   const choice=(name,label,options,value='')=>`<fieldset class="field"><legend>${label}</legend><div class="choice-grid">${options.map(o=>`<label><input type="radio" name="${name}" value="${o}" required${o===value?' checked':''}><span>${o}</span></label>`).join('')}</div></fieldset>`;
-  const head=(title,text)=>`<div class="step-head"><span class="eyebrow green">Visitante</span><h1>${title}</h1><p>${text}</p></div>`;
+  const head=(title,text)=>`<div class="step-head"><span class="eyebrow brand-tone">Visitante</span><h1>${title}</h1><p>${text}</p></div>`;
   const trip=(i)=>{
     const title=i===0?'Ida de hoje':i===1?'Volta de hoje':i===2?'Ida do outro dia':i===3?'Volta do outro dia':`Trecho adicional ${i-3}`;
     return `<section class="trip-panel${i>1?' hidden':''}" data-trip="${i}"><h2>${title}</h2>${i<2?`<p class="field-help">${i===0?'Já realizada · chegada ao evento':'Ainda prevista · saída do evento'}</p>`:i<4?'<p class="field-help other-day-phase"></p>':choice('trip'+i+'Phase','Este trecho adicional…',['Já realizado','Ainda previsto'])}${choice('trip'+i+'Mode','Meio de transporte',modes)}<div data-distance="${i}">${number('trip'+i+'Km','Distância deste trecho, em um sentido (km)')}</div>${i<4?'':number('trip'+i+'Count','Quantas vezes esse trecho acontece?',1,1)}<div data-occupancy="${i}">${number('trip'+i+'Occupants','Pessoas no veículo, incluindo o visitante',1)}</div></section>`;
