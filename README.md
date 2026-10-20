@@ -111,7 +111,7 @@ a API ainda lê a base inteira, adequado ao protótipo, não a bases de grande v
   distintas da mesma pessoa. O backend mantém compatibilidade com envios v1 já pendentes.
 - A coleta acontece em um único dia de um evento de dois dias. Ida de hoje é realizada e volta
   de hoje é prevista, uma vez cada, sem pergunta de período. A participação pode ser só hoje,
-  hoje/amanhã, ontem/hoje ou outro dia incerto. Outro dia exige escolha explícita: repetir os dois
+  hoje/amanhã. As opções ontem/hoje e outro dia incerto foram retiradas da nova coleta; registros anteriores continuam compatíveis. Outro dia exige escolha explícita: repetir os dois
   percursos, informar outro percurso, sem nova viagem ou desconhecido. Só os trechos adicionais
   pedem período/repetições. Hospedagem registra noites reais (antes/entre/depois), nunca dias × noites.
 - Opções são rádios em cartões tocáveis, sem dropdown. Todos os campos textuais/numéricos do

@@ -2,7 +2,7 @@
 (() => {
   const modes=['Carro gasolina','Carro diesel','Carro etanol','Carro elétrico','Carro flex / não sei','Moto','Aplicativo / táxi','Ônibus','Trem','Metrô','Van','Avião','A pé / bicicleta','Não sei'];
   const meals=['Carne bovina','Frango','Vegetariana','Outro / não sei'];
-  const participation={'Só hoje':'today','Hoje e amanhã':'todayTomorrow','Ontem e hoje':'yesterdayToday','Outro dia ainda incerto':'unknown'};
+  const participation={'Só hoje':'today','Hoje e amanhã':'todayTomorrow'};
   const quick=(name,values)=>`<div class="quick-values" role="group" aria-label="Sugestões rápidas"><span class="field-help">Toque para preencher</span>${values.map(v=>`<button type="button" disabled data-fill="${name}" data-value="${v}" aria-pressed="false">${v}</button>`).join('')}</div>`;
   const number=(name,label,min=0,value='')=>{
     const suggestions=name.endsWith('Km')?[5,10,20,50,100]:name.endsWith('Occupants')?[1,2,3,4,5]:name.endsWith('Count')?[1,2]:[0,1,2,3];

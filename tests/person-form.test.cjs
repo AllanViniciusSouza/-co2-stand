@@ -68,7 +68,7 @@ test('pessoa UI: dois dias repetem apenas após escolha explícita, noites não 
  const a=setup();a.fill();a.set('trip0Mode','Carro gasolina');a.set('trip0Km','10');a.set('trip0Occupants','2');a.doc.getElementById('copyOutbound').click();
  a.set('participation','Hoje e amanhã');a.set('otherTravel','Repetir ida e volta de hoje');
  let d=a.w.CO2Person.payload();assert.equal(d.trips.length,4);assert.deepEqual(Array.from(d.trips,t=>t.phase),['done','planned','planned','planned']);assert.equal(d.daysPlanned,1);
- a.set('participation','Ontem e hoje');d=a.w.CO2Person.payload();assert.deepEqual(Array.from(d.trips,t=>t.phase),['done','planned','done','done']);assert.equal(d.daysDone,2);
+ assert.deepEqual(Array.from(a.doc.querySelectorAll('[name=participation]'),el=>el.value),['Só hoje','Hoje e amanhã']);
  a.set('stayType','Hotel / pousada');a.set('stayDone','1');a.set('stayPlanned','0');assert.equal(a.w.CO2Person.payload().stay.done,1);
  a.set('otherTravel','Sem nova viagem');assert.equal(a.w.CO2Person.payload().trips.length,2);
  a.set('otherTravel','Não sei');assert.equal(a.w.CO2Person.payload().trips.at(-1).km,null);

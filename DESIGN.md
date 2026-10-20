@@ -31,7 +31,7 @@ components:
 
 ## Overview
 Ferramenta em português brasileiro para Allan conduzir entrevistas em stands pelo celular.
-Preservar a identidade verde existente. A assinatura é o roteiro de abordagem seguido por seis
+Preservar a identidade verde existente. A assinatura é a coleta guiada em seis
 etapas e um resultado destacado. Priorizar leitura rápida, familiaridade e dados compreensíveis.
 Não transformar a coleta em uma página de marketing. A fonte canônica dos tokens é styles.css;
 este documento registra suas cores, dimensões e usos, sem gerar um segundo tema.
@@ -55,8 +55,7 @@ Usar bordas e fundos suaves, sem sombras decorativas em cards. Cabeçalho e prog
 Campos com 17px, botões com 14px e resultado com 19px de raio, conforme styles.css.
 
 ## Components
-Na tela inicial, o logo branco oficial da UNISAL aparece no topo do bloco verde, ao lado
-da identificação acadêmica. Preservar proporção, cores e respiro; arquivo local em
+O logo branco oficial da UNISAL aparece no cabeçalho fixo das quatro telas, sobre fundo verde. Preservar proporção, cores e respiro; arquivo local em
 `assets/unisal-branco.svg`, obtido do site institucional. Não aplicar filtros ou recortar.
 Formulário e validação: form.js. Transporte de API e formatação numérica: api.js.
 Tokens, scrollbar e controles: styles.css. Resultado final reutiliza as cores dos registros.
