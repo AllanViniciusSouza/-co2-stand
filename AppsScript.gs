@@ -134,7 +134,21 @@ function ensureCalculation_(ss,index,p,unknown) {
   if(index > calc.getMaxRows()) calc.insertRowsAfter(calc.getMaxRows(),index-calc.getMaxRows());
   // A linha 2 é o modelo existente; o Sheets ajusta suas referências relativas.
   calc.getRange(2,1,1,13).copyTo(calc.getRange(index,1,1,13),SpreadsheetApp.CopyPasteType.PASTE_FORMULA,false);
-  exclusions_(p,unknown).forEach(category => calc.getRange(index,5+CATEGORIES.indexOf(category)).clearContent());
+  // Nunca apague fórmulas: a primeira entrevista também é o modelo das seguintes.
+  // A condição acompanha a linha copiada e mantém parcelas desconhecidas vazias.
+  CATEGORIES.forEach((category,i) => {
+    const cell = calc.getRange(index,5+i), formula = cell.getFormula();
+    if(!formula) throw new Error('Fórmula ausente em Cálculos: ' + category + '. Restaure o modelo da linha 2.');
+    cell.setFormula(guardCalculation_(category,index,formula));
+  });
+}
+function guardCalculation_(category,index,formula) {
+  const ref = col => "'Respostas ao formulário 1'!" + col + index;
+  const conditions = ['REGEXMATCH(' + ref('AG') + ';"' + GROUPS[category].join('|') + '")'];
+  if(category === 'Logística') conditions.push('AND(' + ref('P') + '="Sim";OR(' + ref('Q') + '="Caminhão";' + ref('Q') + '="Outro"))');
+  if(category === 'Resíduos') conditions.push(ref('X') + '="Não sei"', 'AND(' + ref('X') + '<>"Nenhum";OR(' + ref('AA') + '="Não sei";AND(' + ref('AA') + '="Aterro / lixo comum";' + ref('Z') + '="Não sei")))');
+  const prefix = '=IF(OR(' + conditions.join(';') + ');"";';
+  return formula.startsWith(prefix) ? formula : prefix + formula.slice(1) + ')';
 }
 function record_(ss,index,raw,values) {
   const p = {}; FIELDS.forEach((key,i) => p[key] = raw[i+1]);

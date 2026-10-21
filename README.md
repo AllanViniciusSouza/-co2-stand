@@ -30,8 +30,9 @@ da aba Fatores. Não é necessário cadastrar uma entrevista fictícia para veri
   período e estado de preparação do cálculo. O backend interrompe a gravação se houver cabeçalhos diferentes.
 - Ao salvar uma nova entrevista, as fórmulas de A:M da linha 2 de **Cálculos** são copiadas com referências
   relativas para a linha correspondente. A linha 2 deve permanecer um modelo válido da metodologia.
-- Fatores e respostas históricas não são reescritos. As categorias sem informação/fator ficam vazias
-  na nova linha de cálculo; o total é a soma das parcelas disponíveis. A interface identifica esse subtotal.
+- Fatores e respostas históricas não são reescritos. As categorias sem informação/fator exibem vazio
+  por uma condição na fórmula; suas fórmulas nunca são apagadas, inclusive na linha 2 usada como modelo.
+  O total é a soma das parcelas disponíveis. A interface identifica esse subtotal.
 - O identificador é persistido no navegador e na planilha. Repetir o envio usa o mesmo ID e não acrescenta
   outra linha. Um bloqueio do Apps Script serializa os envios web.
 - Envios por versões anteriores do frontend, sem identificador, são rejeitados: recarregue o site atualizado.

@@ -52,3 +52,31 @@ test('reenvio com o mesmo ID retorna antes de gravar ou recalcular', () => {
  const response=ctx.save_({getSheetByName:()=>sheet},{requestId:'12345678-1234-1234-1234-123456789012'},{});
  assert.equal(response.ok,true); assert.equal(writes,0); assert.equal(released,true);
 });
+
+test('primeira entrevista parcial preserva fórmulas para a entrevista seguinte', () => {
+ const rows = {2:Array(13).fill('=1')};
+ const calc = {getMaxRows:()=>100, getRange(row,col,height,width) {
+   return {
+     row,col,
+     copyTo(target) { rows[target.row]=rows[row].map(f=>f.replace(/([A-Z]+)2\b/g,'$1'+target.row)); },
+     getFormula() { return rows[row][col-1]; },
+     setFormula(value) { rows[row][col-1]=value; }
+   };
+ }};
+ ctx.SpreadsheetApp={CopyPasteType:{PASTE_FORMULA:'formula'}};
+ const ss={getSheetByName:()=>calc};
+ ctx.ensureCalculation_(ss,2,{...base(),destinoResiduo:'Não sei'},['notebooks']);
+ assert.ok(rows[2][5].includes('REGEXMATCH'));
+ assert.ok(rows[2][8].includes('="Não sei"'));
+ assert.ok(rows[2].every(value=>value.startsWith('=')));
+ ctx.ensureCalculation_(ss,3,base(),[]);
+ assert.ok(rows[3].every(value=>value.startsWith('=')));
+ assert.ok(rows[3][8].includes("'Respostas ao formulário 1'!X3"));
+ assert.equal(rows[3][8].split('REGEXMATCH').length,2);
+});
+
+test('modelo incompleto é identificado antes de marcar cálculo como preparado', () => {
+ ctx.SpreadsheetApp={CopyPasteType:{PASTE_FORMULA:'formula'}};
+ const calc={getMaxRows:()=>100,getRange:()=>({copyTo(){},getFormula:()=>'',setFormula(){}})};
+ assert.throws(()=>ctx.ensureCalculation_({getSheetByName:()=>calc},3,base(),[]),/Fórmula ausente/);
+});
