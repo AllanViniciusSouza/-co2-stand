@@ -20,7 +20,7 @@ Produto acadêmico em pt-BR, para coleta pelo celular. A implementação de refe
 - Nova entrevista limpa rascunho, ID e revisão da modalidade atual e volta à primeira etapa, depois de confirmação do salvamento.
 - Números em pt-BR, kgCO₂e. Desconhecido e ausência de fator não são zeros.
 - Pessoas mantêm realizado e previsto; stands mantêm o evento inteiro. Não apresentar soma global das duas bases.
-- Não extrapolar visitantes para público total. Cobertura de stands usa identificadores distintos em relação aos 33 previstos, sem apagar entrevistas repetidas.
+- Não extrapolar visitantes para público total. A contagem de stands entrevistados usa identificadores distintos, sem exibir o total previsto e sem apagar entrevistas repetidas.
 - API usa a política de acesso já existente do Apps Script; esta mudança não altera compartilhamento ou permissões.
 
 ## Coleta de visitantes em um dia (evento de dois dias)
